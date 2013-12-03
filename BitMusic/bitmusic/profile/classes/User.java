@@ -140,8 +140,8 @@ public class User implements Serializable {
      * @param userId
      */
     public void setUserId(String userId) throws ProfileExceptions {
-        if (userId != "") this.userId = userId;
-        else throw new ProfileExceptions(ProfileExceptionType.UserIdEmptyName);
+        if (userId == null || userId.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.UserIdEmptyName);
+        this.userId = userId;
     }
 
     /**
@@ -157,8 +157,8 @@ public class User implements Serializable {
      * @param login
      */
     public void setLogin(String login) throws ProfileExceptions{
-        if (login != "") this.login = login;
-        else throw new ProfileExceptions(ProfileExceptionType.LoginEmptyName);
+        if (login == null || login.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.LoginEmptyName);
+        this.login = login; 
     }
 
     /**
@@ -174,8 +174,8 @@ public class User implements Serializable {
      * @param password
      */
     public void setPassword(String password) throws ProfileExceptions{
-        if( password != "") this.password = password;
-        else throw new ProfileExceptions(ProfileExceptionType.PasswordEmptyName);
+        if (password == null || password.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.PasswordEmptyName);
+        else this.password = password;
     }
 
     /**
@@ -191,8 +191,8 @@ public class User implements Serializable {
      * @param birthDate
      */
     public void setBirthDate(Calendar birthDate) throws ProfileExceptions{
-        if(birthDate.toString() != "") this.birthDate = birthDate;
-        else throw new ProfileExceptions(ProfileExceptionType.BirthdateEmptyName);
+        if (birthDate == null || birthDate.toString().isEmpty()) throw new ProfileExceptions(ProfileExceptionType.BirthdateEmptyName);
+        else this.birthDate = birthDate;
     }
 
     /**
@@ -208,8 +208,8 @@ public class User implements Serializable {
      * @param firstName
      */
     public void setFirstName(String firstName) throws ProfileExceptions{
-        if(firstName != "") this.firstName = firstName;
-        else throw new ProfileExceptions(ProfileExceptionType.FirstNameEmpty);
+        if (firstName == null || firstName.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.FirstNameEmpty);
+        else this.firstName = firstName;
     }
 
     /**
@@ -225,8 +225,8 @@ public class User implements Serializable {
      * @param lastName
      */
     public void setLastName(String lastName) throws ProfileExceptions{
-        if(lastName != "") this.lastName = lastName;
-        else throw new ProfileExceptions(ProfileExceptionType.LastNameEmpty);
+        if (lastName == null || lastName.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.LastNameEmpty);
+        else this.lastName = lastName;
     }
 
     /**
@@ -242,8 +242,8 @@ public class User implements Serializable {
      * @param avatarPath
      */
     public void setAvatarPath(String avatarPath) throws ProfileExceptions{
-        if(avatarPath != "") this.avatarPath = avatarPath;
-        else throw new ProfileExceptions(ProfileExceptionType.AvatarPathEmpty);
+        if (avatarPath == null || avatarPath.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.AvatarPathEmpty);
+        else this.avatarPath = avatarPath;
     }
 
     /**
@@ -294,8 +294,8 @@ public class User implements Serializable {
      * @param name
      */
     public void addCategory(String name) throws ProfileExceptions {
-        if(name != "") categories.add(new Category(name));
-        else throw new ProfileExceptions(ProfileExceptionType.CategoryEmptyName);
+        if (name == null || name.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.CategoryEmptyName);
+        else categories.add(new Category(name));
     }
 
     /**
@@ -304,8 +304,8 @@ public class User implements Serializable {
      * @param newName
      */
     public void updateCategory(String categoryId, String newName) throws ProfileExceptions {
-       if(newName != "") this.getCategoryById(categoryId).setName(newName);
-       else throw new ProfileExceptions(ProfileExceptionType.CategoryEmptyName);
+       if (newName == null || newName.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.CategoryEmptyName);
+       else this.getCategoryById(categoryId).setName(newName);
     }
 
     /**
@@ -355,8 +355,8 @@ public class User implements Serializable {
      * @param song
      */
     public void deleteSong(String songId) throws ProfileExceptions{
-        if(songId != "") this.localSongs.removeSong(songId);
-        else throw new ProfileExceptions(ProfileExceptionType.SongEmptyName);
+        if (songId == null || songId.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.SongEmptyName);
+        else this.localSongs.removeSong(songId);
     }
 
     /**
