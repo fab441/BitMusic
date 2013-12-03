@@ -5,7 +5,6 @@
 
 package bitmusic.profile.classes;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,7 +12,6 @@ import java.util.UUID;
 
 import org.jasypt.util.password.ConfigurablePasswordEncryptor;
 
-import sun.awt.shell.ShellFolder;
 import bitmusic.music.data.Song;
 import bitmusic.music.data.SongLibrary;
 import bitmusic.profile.utilities.ProfileExceptionType;
@@ -70,11 +68,6 @@ public class User implements Serializable {
     /**
      *
      */
-    private static final File myDocumentsFolder = (File) ShellFolder.get("fileChooserDefaultFolder");
-
-    /**
-     *
-     */
     private ArrayList<Category> categories;
 
     //######################### CONSTRUCTORS ###########################//
@@ -97,7 +90,7 @@ public class User implements Serializable {
         this.birthDate = birthDate;
         this.avatarPath = avatarPath;
         this.categories = new ArrayList<Category>();
-        categories.add(new Category("Général"));
+        categories.add(new Category("Default"));
     }
 
     /**
@@ -208,7 +201,7 @@ public class User implements Serializable {
      * @param firstName
      */
     public void setFirstName(String firstName) throws ProfileExceptions{
-        if (firstName == null || firstName.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.FirstNameEmpty);
+        if (firstName == null || firstName.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.FirstNameNullOrEmpty);
         else this.firstName = firstName;
     }
 
@@ -225,7 +218,7 @@ public class User implements Serializable {
      * @param lastName
      */
     public void setLastName(String lastName) throws ProfileExceptions{
-        if (lastName == null || lastName.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.LastNameEmpty);
+        if (lastName == null || lastName.isEmpty()) throw new ProfileExceptions(ProfileExceptionType.LastNameNullOrEmpty);
         else this.lastName = lastName;
     }
 
@@ -260,7 +253,7 @@ public class User implements Serializable {
      */
     public Category getCategoryById(String categoryId) throws ProfileExceptions {
         for(Category cat : this.categories) {
-            if(cat.getId() == categoryId) {
+            if(cat.getId().equals(categoryId)) {
                 return cat;
             }
         }
@@ -281,12 +274,12 @@ public class User implements Serializable {
      * @return
      */
     public User getContact(String userId) {
-    	User usr = null;
     	for (Category cat : categories) {
-    		usr = cat.findContact(userId);
-    		if (usr != null) break;
+    		User usr = cat.findContact(userId);
+    		if (usr != null)
+                    return usr;
     	}
-        return usr;
+        return null;
     }
 
     /**
@@ -377,7 +370,9 @@ public class User implements Serializable {
         int year = this.birthDate.get(Calendar.YEAR);
         int month = this.birthDate.get(Calendar.MONTH);
         int day = this.birthDate.get(Calendar.DAY_OF_MONTH);
-        return Integer.toString(year) + Integer.toString(month) + Integer.toString(day);
+        return Integer.toString(year) 
+                + Integer.toString(month)
+                + Integer.toString(day);
     }
 
     /**
@@ -387,11 +382,23 @@ public class User implements Serializable {
      */
     public String getEncryptedPassword() {
     	ConfigurablePasswordEncryptor pwdEncryptor = new ConfigurablePasswordEncryptor();
-		pwdEncryptor.setAlgorithm("SHA-1");
-		return pwdEncryptor.encryptPassword(password);
+	pwdEncryptor.setAlgorithm("SHA-1");
+	return pwdEncryptor.encryptPassword(password);
     }
 
-	public String getFolderName() {
-		return login + "_" + getTransformedBirthday();
+    public String getFolderName() {
+	return login + "_" + getTransformedBirthday();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (!(o instanceof User)) return false;
+    	User user = (User) o;
+		return this.login      == user.login     &&
+			   this.password   == user.password  &&
+			   this.firstName  == user.firstName &&
+			   this.lastName   == user.lastName  &&
+			   this.birthDate  == user.birthDate &&
+			   this.avatarPath == user.avatarPath;
     }
 }
